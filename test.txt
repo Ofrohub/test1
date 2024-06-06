@@ -4291,44 +4291,38 @@ spawn(function()
         Name = "Chest Farm"
     })
 
-    Name = "Auto Chest [MUP]",
-Default = false,
-Callback = function(Value)
-    AutoFarmChest = Value
-    StopTween(AutoFarmChest)
-end    
-
-_G.MagnitudeAdd = 0
-spawn(function()
-    while wait() do 
-        if AutoFarmChest then
-            for i,v in pairs(game:GetService("Workspace"):GetChildren()) do 
-                if v.Name:find("Chest") then
-                    if game:GetService("Workspace"):FindFirstChild(v.Name) then
-                        if (v.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 5000+_G.MagnitudeAdd then
-                            repeat wait()
-                                if game:GetService("Workspace"):FindFirstChild(v.Name) then
-                                    local distance = (v.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-                                    if distance <= 5 then -- Adjust this value to fit your desired distance to the chest
-                                        -- Press left mouse button when close to the chest
-                                        game:GetService("UserInputService"):MouseClick(1)
-                                        break -- Exit the loop once the left mouse button is pressed
-                                    else
+    M:AddToggle({
+        Name = "Auto Chest [MUP]",
+        Default = false,
+        Callback = function(Value)
+            AutoFarmChest = Value
+            StopTween(AutoFarmChest)
+        end    
+    })
+    
+    _G.MagnitudeAdd = 0
+    spawn(function()
+        while wait() do 
+            if AutoFarmChest then
+                for i,v in pairs(game:GetService("Workspace"):GetChildren()) do 
+                    if v.Name:find("Chest") then
+                        if game:GetService("Workspace"):FindFirstChild(v.Name) then
+                            if (v.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 5000+_G.MagnitudeAdd then
+                                repeat wait()
+                                    if game:GetService("Workspace"):FindFirstChild(v.Name) then
                                         topos(v.CFrame)
                                     end
-                                end
-                            until AutoFarmChest == false or not v.Parent
-                            topos(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
-                            _G.MagnitudeAdd = _G.MagnitudeAdd+1500
-                            break
+                                until AutoFarmChest == false or not v.Parent
+                                topos(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
+                                _G.MagnitudeAdd = _G.MagnitudeAdd+1500
+                                break
+                            end
                         end
                     end
                 end
             end
         end
-    end
-end)
-
+    end)
 
     M:AddToggle({
         Name = "Auto Chest[Bypass]",
